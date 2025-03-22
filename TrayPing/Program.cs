@@ -14,7 +14,7 @@ namespace TrayPing
 
                 ContextMenuStrip = new ContextMenuStrip()
             };
-            trayIcon.ContextMenuStrip.Items.Add("Quit", null, (s, e) => Application.Exit());
+            trayIcon.ContextMenuStrip.Items.Add("Quit", SystemIcons.Error.ToBitmap(), (s, e) => Application.Exit());
 
             _ = UpdatePingLoop();
 
