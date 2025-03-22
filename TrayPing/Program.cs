@@ -1,8 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
+﻿using System.Net.NetworkInformation;
+using System.Windows.Forms.PropertyGridInternal;
 
 namespace TrayPing
 {
@@ -11,17 +8,28 @@ namespace TrayPing
 
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            trayIcon = new NotifyIcon
+            {
+                Visible = true,
 
-            trayIcon = new NotifyIcon();
-            CreateTextIcon("15");
-            trayIcon.Visible = true;
-
-            trayIcon.ContextMenuStrip = new ContextMenuStrip();
+                ContextMenuStrip = new ContextMenuStrip()
+            };
             trayIcon.ContextMenuStrip.Items.Add("Quit", null, (s, e) => Application.Exit());
 
+            _ = UpdatePingLoop();
+
+
             Application.Run();
+        }
+
+        static async Task UpdatePingLoop()
+        {
+            while (true)
+            {
+                long ping = GetPing("www.google.com");
+                CreateTextIcon(ping >= 0 ? ping.ToString() : "Er" );
+                await Task.Delay(TimeSpan.FromSeconds(1));
+            }
         }
 
         static void CreateTextIcon(string text) 
@@ -39,6 +47,25 @@ namespace TrayPing
            
             hIcon = bitmapText.GetHicon();
             trayIcon.Icon = Icon.FromHandle(hIcon);
+        }
+
+        static long GetPing(string host)
+        {
+            try
+            {
+                Ping ping = new();
+                PingReply reply = ping.Send(host);
+                if (reply.Status == IPStatus.Success)
+                {
+                    return reply.RoundtripTime;
+                }
+            }
+            catch
+            {
+                return -1;
+            }
+
+            return -1;
         }
     } 
 }
