@@ -57,7 +57,7 @@ namespace TrayPing {
 
         private static GraphicsPath CreateRoundedRectangle(Rectangle rect, int radius)
         {
-            var path = new GraphicsPath();
+            GraphicsPath path = new();
             int diameter = radius * 2;
 
             path.StartFigure();

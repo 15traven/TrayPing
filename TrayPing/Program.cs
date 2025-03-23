@@ -32,9 +32,9 @@ namespace TrayPing
 
         static void CreateTextIcon(string text) 
         {
-            Font font = new Font("TTRounds", 16, FontStyle.Regular, GraphicsUnit.Pixel);
+            Font font = new("TTRounds", 16, FontStyle.Regular, GraphicsUnit.Pixel);
             Brush brush = new SolidBrush(Color.White);
-            Bitmap bitmapText = new Bitmap(16, 16);
+            Bitmap bitmapText = new(16, 16);
             Graphics graphics = System.Drawing.Graphics.FromImage(bitmapText);
 
             IntPtr hIcon;
