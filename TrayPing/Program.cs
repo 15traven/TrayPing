@@ -1,5 +1,4 @@
 ﻿using System.Net.NetworkInformation;
-using System.Windows.Forms.PropertyGridInternal;
 
 namespace TrayPing
 {
@@ -10,11 +9,10 @@ namespace TrayPing
         {
             trayIcon = new NotifyIcon
             {
-                Visible = true,
-
-                ContextMenuStrip = new ContextMenuStrip()
+                ContextMenuStrip = new TrayMenu(),
+                Visible = true
             };
-            trayIcon.ContextMenuStrip.Items.Add("Quit", SystemIcons.Error.ToBitmap(), (s, e) => Application.Exit());
+            trayIcon.ContextMenuStrip.Items.Add("Quit", null, (s, e) => Application.Exit());
 
             _ = UpdatePingLoop();
 
