@@ -19,6 +19,7 @@ namespace TrayPing {
                                 sizeof(uint));
             
             this.Renderer = new TrayMenuRenderer();
+            this.ShowImageMargin = false;
         }
 
         public enum DWMWINDOWATTRIBUTE
