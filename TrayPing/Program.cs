@@ -1,4 +1,6 @@
-﻿using System.Net.NetworkInformation;
+﻿using System;
+using Microsoft.Win32;
+using System.Net.NetworkInformation;
 
 namespace TrayPing
 {
@@ -17,6 +19,7 @@ namespace TrayPing
             _ = UpdatePingLoop();
 
 
+            RunOnStartup(true);
             Application.Run();
         }
 
@@ -64,6 +67,19 @@ namespace TrayPing
             }
 
             return -1;
+        }
+
+
+        static void RunOnStartup(bool enable)
+        {
+            string appName = "TrayPing";
+            string exePath = Application.ExecutablePath;
+
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (enable)
+                key.SetValue(appName, exePath);
+            else
+                key.DeleteValue(appName, false);
         }
     } 
 }
