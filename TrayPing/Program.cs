@@ -21,6 +21,7 @@ namespace TrayPing
             
             trayIcon.ContextMenuStrip.Items.Add(autolaunchMenuItem);
             trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+            trayIcon.ContextMenuStrip.Items.Add("About", null, ShowAbout);
             trayIcon.ContextMenuStrip.Items.Add("Quit", null, (s, e) => Application.Exit());
 
             _ = UpdatePingLoop();
@@ -80,6 +81,16 @@ namespace TrayPing
             bool enable = !Autolaunch.IsEnabled();
             Autolaunch.Toggle(enable);
             autolaunchMenuItem.Text = enable ? "Disable autolaunch" : "Enable autolaunch";
+        }
+
+        static void ShowAbout(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "TrayPing v.1.0\nPing status tray app",
+                "About",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
         }
     } 
 }
