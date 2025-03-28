@@ -22,7 +22,7 @@ namespace TrayPing
             key.SetValue(AppName, enable ? new byte[] { 2, 0, 0, 0 } : new byte[] { 3, 0, 0, 0 }, RegistryValueKind.Binary);
         }
 
-        public static bool IsAutolaunchEnabled()
+        public static bool IsEnabled()
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(TaskManagerRegKey, true);
             if (key?.GetValue(AppName) is byte[] value)

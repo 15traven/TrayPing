@@ -16,7 +16,7 @@ namespace TrayPing
             };
 
             Autolaunch.Register();
-            string menuText = Autolaunch.IsAutolaunchEnabled() ? "Disable autolaunch" : "Enable autolaunch";
+            string menuText = Autolaunch.IsEnabled() ? "Disable autolaunch" : "Enable autolaunch";
             autolaunchMenuItem = new ToolStripMenuItem(menuText, null, ToggleAutolaunch);
             
             trayIcon.ContextMenuStrip.Items.Add(autolaunchMenuItem);
@@ -77,7 +77,7 @@ namespace TrayPing
 
         static void ToggleAutolaunch(object sender, EventArgs e)
         {
-            bool enable = !Autolaunch.IsAutolaunchEnabled();
+            bool enable = !Autolaunch.IsEnabled();
             Autolaunch.Toggle(enable);
             autolaunchMenuItem.Text = enable ? "Disable autolaunch" : "Enable autolaunch";
         }
