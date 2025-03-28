@@ -48,9 +48,9 @@ namespace TrayPing
         {
             while (true)
             {
-                long ping = GetPing("www.google.com");
+                long ping = GetPing(Properties.Settings.Default.TargetHost);
                 CreateTextIcon(ping >= 0 ? ping.ToString() : "Er" );
-                await Task.Delay(TimeSpan.FromSeconds(1));
+                await Task.Delay(TimeSpan.FromSeconds(Properties.Settings.Default.PingFrequency));
             }
         }
 

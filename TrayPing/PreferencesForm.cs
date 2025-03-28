@@ -28,7 +28,7 @@ namespace TrayPing
                 FlatStyle = FlatStyle.Flat
             };
             targetHostTextBox = new TextBox { 
-                Text = "www.google.com", 
+                Text = Properties.Settings.Default.TargetHost, 
                 Left = 120, 
                 Top = 20, 
                 Width = 150, 
@@ -43,7 +43,7 @@ namespace TrayPing
                 FlatStyle = FlatStyle.Flat
             };
             pingFrequencyBox = new NumericUpDown { 
-                Value = 1, 
+                Value = Properties.Settings.Default.PingFrequency, 
                 Minimum = 1, 
                 Left = 120, 
                 Top = 60, 
@@ -61,6 +61,7 @@ namespace TrayPing
                 AutoSize = true,
                 FlatStyle = FlatStyle.Flat
             };
+            autolaunchCheckBox.Checked = Autolaunch.IsEnabled();
 
             Button saveButton = new Button { 
                 Text = "Save",
@@ -69,6 +70,8 @@ namespace TrayPing
                 Width = 80,
                 FlatStyle = FlatStyle.Flat
             };
+            saveButton.Click += SavePreferences;
+
             Button cancelButton = new Button { 
                 Text = "Cancel", 
                 Left = 190, 
@@ -85,6 +88,33 @@ namespace TrayPing
             Controls.Add(autolaunchCheckBox);
             Controls.Add(saveButton);
             Controls.Add(cancelButton);
+        }
+
+        private void SavePreferences(object sender, EventArgs e)
+        { 
+              
+            if (!string.IsNullOrEmpty(targetHostTextBox.Text)) 
+            {
+                Properties.Settings.Default.TargetHost = targetHostTextBox.Text;
+                Properties.Settings.Default.PingFrequency = (int)pingFrequencyBox.Value;
+
+                if (autolaunchCheckBox.Checked)
+                    Autolaunch.Toggle(true);
+                else 
+                    Autolaunch.Toggle(false);
+
+                Properties.Settings.Default.Save();
+                this.Close();
+            }
+            else 
+            {
+                MessageBox.Show(
+                    "Target host cannot be none", 
+                    "Error saving preferences", 
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
     }
 }
