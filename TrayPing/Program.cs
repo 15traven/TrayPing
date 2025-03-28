@@ -29,16 +29,6 @@ namespace TrayPing
             Application.Run();
         }
 
-        static async Task UpdatePingLoop()
-        {
-            while (true)
-            {
-                long ping = GetPing("www.google.com");
-                CreateTextIcon(ping >= 0 ? ping.ToString() : "Er" );
-                await Task.Delay(TimeSpan.FromSeconds(1));
-            }
-        }
-
         static void CreateTextIcon(string text) 
         {
             Font font = new("TTRounds", 16, FontStyle.Regular, GraphicsUnit.Pixel);
@@ -55,6 +45,17 @@ namespace TrayPing
             hIcon = bitmapText.GetHicon();
             trayIcon.Icon = Icon.FromHandle(hIcon);
         }
+
+        static async Task UpdatePingLoop()
+        {
+            while (true)
+            {
+                long ping = GetPing("www.google.com");
+                CreateTextIcon(ping >= 0 ? ping.ToString() : "Er" );
+                await Task.Delay(TimeSpan.FromSeconds(1));
+            }
+        }
+
 
         static long GetPing(string host)
         {
@@ -74,7 +75,6 @@ namespace TrayPing
 
             return -1;
         }
-
 
         static void ToggleAutolaunch(object sender, EventArgs e)
         {
