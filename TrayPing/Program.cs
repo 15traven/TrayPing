@@ -1,11 +1,11 @@
 ﻿using System;
-using Microsoft.Win32;
 using System.Net.NetworkInformation;
 
 namespace TrayPing
 {
     class Program {
         private static NotifyIcon trayIcon;
+        private static ToolStripMenuItem autolaunchMenuItem;
 
         static void Main()
         {
@@ -14,12 +14,17 @@ namespace TrayPing
                 ContextMenuStrip = new TrayMenu(),
                 Visible = true
             };
+
+            Autolaunch.Register();
+            string menuText = Autolaunch.IsAutolaunchEnabled() ? "Disable autolaunch" : "Enable autolaunch";
+            autolaunchMenuItem = new ToolStripMenuItem(menuText, null, ToggleAutolaunch);
+            
+            trayIcon.ContextMenuStrip.Items.Add(autolaunchMenuItem);
+            trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             trayIcon.ContextMenuStrip.Items.Add("Quit", null, (s, e) => Application.Exit());
 
             _ = UpdatePingLoop();
 
-
-            RunOnStartup(true);
             Application.Run();
         }
 
@@ -70,16 +75,11 @@ namespace TrayPing
         }
 
 
-        static void RunOnStartup(bool enable)
+        static void ToggleAutolaunch(object sender, EventArgs e)
         {
-            string appName = "TrayPing";
-            string exePath = Application.ExecutablePath;
-
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (enable)
-                key.SetValue(appName, exePath);
-            else
-                key.DeleteValue(appName, false);
+            bool enable = !Autolaunch.IsAutolaunchEnabled();
+            Autolaunch.Toggle(enable);
+            autolaunchMenuItem.Text = enable ? "Disable autolaunch" : "Enable autolaunch";
         }
     } 
 }
