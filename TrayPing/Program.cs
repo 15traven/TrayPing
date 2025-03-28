@@ -12,7 +12,6 @@ namespace TrayPing
             trayIcon = new NotifyIcon
             {
                 ContextMenuStrip = new TrayMenu(),
-                Visible = true
             };
             
             trayIcon.ContextMenuStrip.Items.Add("Preferences", null, (s, e) => new PreferencesForm().Show());
@@ -24,7 +23,24 @@ namespace TrayPing
 
             _ = UpdatePingLoop();
 
-            Application.Run();
+            bool createdNew;
+            using(var mutex = new System.Threading.Mutex(true, "TrayPing", out createdNew))
+            {
+                if (createdNew)
+                {
+                    trayIcon.Visible = true;
+                    Application.Run();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "There is already an instance running",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+            }
         }
 
         static void CreateTextIcon(string text) 
