@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net.NetworkInformation;
+using Microsoft.VisualBasic;
 
 namespace TrayPing
 {
     class Program {
         private static NotifyIcon trayIcon;
-        private static ToolStripMenuItem autolaunchMenuItem;
 
         static void Main()
         {
@@ -14,15 +14,13 @@ namespace TrayPing
                 ContextMenuStrip = new TrayMenu(),
                 Visible = true
             };
-
-            Autolaunch.Register();
-            string menuText = Autolaunch.IsEnabled() ? "Disable autolaunch" : "Enable autolaunch";
-            autolaunchMenuItem = new ToolStripMenuItem(menuText, null, ToggleAutolaunch);
             
-            trayIcon.ContextMenuStrip.Items.Add(autolaunchMenuItem);
+            trayIcon.ContextMenuStrip.Items.Add("Preferences", null, (s, e) => new PreferencesForm().Show());
             trayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             trayIcon.ContextMenuStrip.Items.Add("About", null, ShowAbout);
             trayIcon.ContextMenuStrip.Items.Add("Quit", null, (s, e) => Application.Exit());
+
+            Autolaunch.Register();
 
             _ = UpdatePingLoop();
 
@@ -74,13 +72,6 @@ namespace TrayPing
             }
 
             return -1;
-        }
-
-        static void ToggleAutolaunch(object sender, EventArgs e)
-        {
-            bool enable = !Autolaunch.IsEnabled();
-            Autolaunch.Toggle(enable);
-            autolaunchMenuItem.Text = enable ? "Disable autolaunch" : "Enable autolaunch";
         }
 
         static void ShowAbout(object sender, EventArgs e)
