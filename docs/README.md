@@ -7,13 +7,11 @@
 Pings www.google.com at a selected frequency, this address can be configured
 
 <br />
-<br />
 
 > [!IMPORTANT]
 > ## Tested on
-> - Windows 11 (24H2)
-
-<br />
+> - Windows 11
+> - Windows 10
 <br />
 
 inspired by [MenuPing](https://github.com/julienbordet/MenuPing) MacOS app
