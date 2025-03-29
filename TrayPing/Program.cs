@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Net.NetworkInformation;
 using Microsoft.VisualBasic;
 
 namespace TrayPing
 {
     class Program {
+        [DllImport("UXTheme.dll", SetLastError = true, EntryPoint = "#138")]
+        private static extern bool ShouldSystemUseDarkMode();
+
         private static NotifyIcon trayIcon;
 
         static void Main()
@@ -46,7 +50,7 @@ namespace TrayPing
         static void CreateTextIcon(string text) 
         {
             Font font = new("TTRounds", 16, FontStyle.Regular, GraphicsUnit.Pixel);
-            Brush brush = new SolidBrush(Color.White);
+            Brush brush = new SolidBrush(ShouldSystemUseDarkMode() ? Color.White : Color.Black);
             Bitmap bitmapText = new(16, 16);
             Graphics graphics = System.Drawing.Graphics.FromImage(bitmapText);
 
